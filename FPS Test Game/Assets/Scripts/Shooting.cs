@@ -18,7 +18,7 @@ public class Shooting : MonoBehaviour
     public float fireRate = 10f;
     private float nextToFire = 0f;
     
-    private float nextToReload = 0f;
+    //private float nextToReload = 0f;
 
     // Update is called once per frame
     void Update()
@@ -36,7 +36,7 @@ public class Shooting : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.R) == true && Time.time >= nextToFire && ammoCount < magSize)
         {
 
-            nextToReload = Time.time + 1f;
+            //nextToReload = Time.time + 1f;
             ammoCount = magSize;
         }
     }
