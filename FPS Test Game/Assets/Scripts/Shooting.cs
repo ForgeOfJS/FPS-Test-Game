@@ -7,8 +7,8 @@ public class Shooting : MonoBehaviour
     public float damage = 10f;
     //public float range = 100f;
     public float force = 1f;
-    public int magSize = 30;
-    public int ammoCount = 0;
+    public int maxCharge = 200;
+    public int currCharge = 0;
     //references
     public ParticleSystem flash;
     public Camera fpsCam;
@@ -18,32 +18,36 @@ public class Shooting : MonoBehaviour
     public float fireRate = 10f;
     private float nextToFire = 0f;
     
-    //private float nextToReload = 0f;
 
     // Update is called once per frame
     void Update()
     {
+        Debug.Log(currCharge + "/" + maxCharge);
         //if mouse1 pressed fire the shoota
         //also limits fire presses based on rate of fire values
-        if (Input.GetButton("Fire1") && Time.time >= nextToFire && ammoCount > 0)
+        if (Input.GetButton("Fire1") && Time.time >= nextToFire && currCharge > 0)
         {
-            ammoCount--;
+            currCharge = currCharge - 1;
             nextToFire = Time.time + 1f / fireRate;
             Shoot();
         }
 
         //check if user presses r and reloads mag if mag is not empty and they are not already shooting
-        if (Input.GetKeyDown(KeyCode.R) == true && Time.time >= nextToFire && ammoCount < magSize)
+        if (Input.GetKeyDown(KeyCode.R) == true && Time.time >= nextToFire && currCharge < maxCharge)
         {
 
-            //nextToReload = Time.time + 1f;
-            ammoCount = magSize;
+            currCharge = maxCharge;
         }
+
+        //charging over time
+        //if (currCharge < maxCharge && Time.time >= nextToFire)
+        //{
+           // currCharge += 1;
+        //}
     }
 
     public void Shoot()
     {
-        Debug.Log(ammoCount + "/" + magSize);
         flash.Play();
         RaycastHit hit;
         //shoots ray out and returns true if ray hits an object
