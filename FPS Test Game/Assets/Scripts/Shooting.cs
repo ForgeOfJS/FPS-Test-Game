@@ -7,8 +7,8 @@ public class Shooting : MonoBehaviour
     public float damage = 10f;
     //public float range = 100f;
     public float force = 1f;
-    public int maxCharge = 200;
-    public int currCharge = 0;
+    public float maxCharge = 30f;
+    private float currCharge = 0f;
     //references
     public ParticleSystem flash;
     public Camera fpsCam;
@@ -18,32 +18,29 @@ public class Shooting : MonoBehaviour
     public float fireRate = 10f;
     private float nextToFire = 0f;
     
-
-    // Update is called once per frame
     void Update()
     {
-        Debug.Log(currCharge + "/" + maxCharge);
-        //if mouse1 pressed fire the shoota
-        //also limits fire presses based on rate of fire values
-        if (Input.GetButton("Fire1") && Time.time >= nextToFire && currCharge > 0)
+        Debug.Log((int)currCharge + "/" + maxCharge);
+        //if mouse1 pressed fire
+        //also limits fire presses based on rate of fire values and current charge
+        if (Input.GetButton("Fire1") && Time.time >= nextToFire && currCharge < maxCharge)
         {
-            currCharge = currCharge - 1;
+            currCharge += 1f;
             nextToFire = Time.time + 1f / fireRate;
             Shoot();
         }
 
-        //check if user presses r and reloads mag if mag is not empty and they are not already shooting
-        if (Input.GetKeyDown(KeyCode.R) == true && Time.time >= nextToFire && currCharge < maxCharge)
+        //cool down the gun after gun stops firing
+        if (currCharge > 0 && Time.time >= nextToFire)
         {
-
-            currCharge = maxCharge;
+            currCharge -= 3f * Time.deltaTime;
         }
-
-        //charging over time
-        //if (currCharge < maxCharge && Time.time >= nextToFire)
+        //check if user presses r and reloads mag if mag is not empty and they are not already shooting
+        //if (Input.GetKeyDown(KeyCode.R) == true && Time.time >= nextToFire && currCharge < maxCharge)
         //{
-           // currCharge += 1;
+           // currCharge = maxCharge;
         //}
+
     }
 
     public void Shoot()
