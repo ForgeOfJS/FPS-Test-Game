@@ -5,7 +5,6 @@ using UnityEngine;
 public class Shooting : MonoBehaviour
 {
     public float damage = 10f;
-    //public float range = 100f;
     public float force = 1f;
     public float maxCharge = 30f;
     private float currCharge = 0f;
@@ -26,8 +25,24 @@ public class Shooting : MonoBehaviour
         if (Input.GetButton("Fire1") && Time.time >= nextToFire && currCharge < maxCharge)
         {
             currCharge += 1f;
-            nextToFire = Time.time + 1f / fireRate;
+
+            //altering firerate based on the charge of the weapon
+            //essentially the higher the currCharge the slower the firerate
+            if (currCharge <= 20)
+            {
+                nextToFire = Time.time + 1f / fireRate;
+            }
+            else if (currCharge <= 25)
+            {
+                nextToFire = Time.time + 1.5f / fireRate;
+            }
+            else
+            {
+                nextToFire = Time.time + 2f / fireRate;
+            }
+            
             Shoot();
+
         }
 
         //cool down the gun after gun stops firing
@@ -48,6 +63,7 @@ public class Shooting : MonoBehaviour
         flash.Play();
         RaycastHit hit;
         //shoots ray out and returns true if ray hits an object
+        //can also add effective range float value
         if (Physics.Raycast(fpsCam.transform.position, fpsCam.transform.forward, out hit))
         {
 
