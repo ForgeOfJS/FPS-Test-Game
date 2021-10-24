@@ -1000,6 +1000,8 @@ MonoBehaviour:
   damage: 10
   force: 100
   maxCharge: 30
+  chargeRate: 3
+  maxCoolTime: 10
   flash: {fileID: 1969770077}
   fpsCam: {fileID: 963194227}
   impact: {fileID: 4199474264650417622, guid: e665538b81545a447a1e0d3033610fbf, type: 3}

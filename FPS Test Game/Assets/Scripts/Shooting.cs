@@ -7,7 +7,12 @@ public class Shooting : MonoBehaviour
     public float damage = 10f;
     public float force = 1f;
     public float maxCharge = 30f;
+    public float chargeRate = 3f;
+    public float maxCoolTime = 15f;
+
     private float currCharge = 0f;
+    private bool isCooling = false;
+
     //references
     public ParticleSystem flash;
     public Camera fpsCam;
@@ -19,6 +24,18 @@ public class Shooting : MonoBehaviour
     
     void Update()
     {
+        //check if gun is currently reloading
+        if (isCooling)
+        {
+            return;
+        }
+
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            StartCoroutine(CoolDown());
+            return;
+        }
+        //manual reload 
         Debug.Log((int)currCharge + "/" + maxCharge);
         //if mouse1 pressed fire
         //also limits fire presses based on rate of fire values and current charge
@@ -45,17 +62,18 @@ public class Shooting : MonoBehaviour
 
         }
 
-        //cool down the gun after gun stops firing
-        if (currCharge > 0 && Time.time >= nextToFire)
-        {
-            currCharge -= 3f * Time.deltaTime;
-        }
-        //check if user presses r and reloads mag if mag is not empty and they are not already shooting
-        //if (Input.GetKeyDown(KeyCode.R) == true && Time.time >= nextToFire && currCharge < maxCharge)
-        //{
-           // currCharge = maxCharge;
-        //}
 
+        //cool down the gun after gun stops firing
+        if (!Input.GetButton("Fire1") && currCharge > 0 && Time.time >= nextToFire)
+        {
+            currCharge -= chargeRate * Time.deltaTime;
+        }
+
+        if (currCharge >= maxCharge)
+        {
+            StartCoroutine(CoolDown());
+            return;
+        }
     }
 
     public void Shoot()
@@ -78,5 +96,17 @@ public class Shooting : MonoBehaviour
             GameObject bullet = Instantiate(impact, hit.point, Quaternion.LookRotation(hit.normal));
             Destroy(bullet, 1f);
         }
+    }
+
+    IEnumerator CoolDown()
+    {
+        isCooling = true;
+
+        Debug.Log("Cooling Down...");
+        yield return new WaitForSeconds(currCharge / maxCoolTime);
+        //cool down the gun after gun stops firing
+        currCharge = 0;
+
+        isCooling = false;
     }
 }
