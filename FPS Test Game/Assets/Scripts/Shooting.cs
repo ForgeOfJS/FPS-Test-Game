@@ -8,7 +8,7 @@ public class Shooting : MonoBehaviour
     public float force = 1f;
     public float maxCharge = 30f;
     public float chargeRate = 3f;
-    public float maxCoolTime = 15f;
+    public float maxCoolTime = .95f;
 
     private float currCharge = 0f;
     private bool isCooling = false;
@@ -30,11 +30,11 @@ public class Shooting : MonoBehaviour
             return;
         }
 
-        if (Input.GetKeyDown(KeyCode.R))
-        {
-            StartCoroutine(CoolDown());
-            return;
-        }
+        //if (Input.GetKeyDown(KeyCode.R))
+        //{
+            //StartCoroutine(CoolDown());
+            //return;
+        //}
         //manual reload 
         Debug.Log((int)currCharge + "/" + maxCharge);
         //if mouse1 pressed fire
