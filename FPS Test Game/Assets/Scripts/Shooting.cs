@@ -8,7 +8,8 @@ public class Shooting : MonoBehaviour
     public float force = 1f;
     public float maxCharge = 30f;
     public float chargeRate = 3f;
-    public float maxCoolTime = .95f;
+    public float maxCoolTime;
+    public float range;
 
     private float currCharge = 0f;
     private bool isCooling = false;
@@ -29,13 +30,13 @@ public class Shooting : MonoBehaviour
         {
             return;
         }
-
-        //if (Input.GetKeyDown(KeyCode.R))
-        //{
-            //StartCoroutine(CoolDown());
-            //return;
-        //}
         //manual reload 
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            StartCoroutine(CoolDown());
+            return;
+        }
+        
         Debug.Log((int)currCharge + "/" + maxCharge);
         //if mouse1 pressed fire
         //also limits fire presses based on rate of fire values and current charge
@@ -82,7 +83,7 @@ public class Shooting : MonoBehaviour
         RaycastHit hit;
         //shoots ray out and returns true if ray hits an object
         //can also add effective range float value
-        if (Physics.Raycast(fpsCam.transform.position, fpsCam.transform.forward, out hit))
+        if (Physics.Raycast(fpsCam.transform.position, fpsCam.transform.forward, out hit, range))
         {
 
             //if targeted object has rigidbody apply a force 
